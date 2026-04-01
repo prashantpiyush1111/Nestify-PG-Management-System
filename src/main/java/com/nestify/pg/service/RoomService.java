@@ -17,8 +17,10 @@ public class RoomService {
     }
 
     public Room findRoomByNumber(String roomNumber) {
+        if (roomNumber == null) return null;
+
         for (Room room : rooms) {
-            if (room.getRoomNumber().equals(roomNumber)) {
+            if (roomNumber.equals(room.getRoomNumber())) {
                 return room;
             }
         }

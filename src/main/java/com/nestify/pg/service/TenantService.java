@@ -1,4 +1,5 @@
 package com.nestify.pg.service;
+
 import com.nestify.pg.entity.Tenant;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,5 +14,16 @@ public class TenantService {
 
     public List<Tenant> getAllTenants() {
         return tenants;
+    }
+
+    public Tenant findTenantByName(String name) {
+        if (name == null) return null;
+
+        for (Tenant tenant : tenants) {
+            if (name.equals(tenant.getName())) {
+                return tenant;
+            }
+        }
+        return null;
     }
 }

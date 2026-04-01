@@ -40,5 +40,22 @@ public class MainApp {
         System.out.println("Tenant Added: " + tenant.getName());
         System.out.println("Payment Done by: " + payment.getTenantName());
         System.out.println("Complaint: " + complaint.getIssue());
+        
+        
+     // Search Room
+        Room foundRoom = roomService.findRoomByNumber("101");
+        if (foundRoom != null) {
+            System.out.println("Room Found: " + foundRoom.getRoomNumber());
+        } else {
+            System.out.println("Room not found");
+        }
+
+        // Search Tenant
+        Tenant foundTenant = tenantService.findTenantByName("Rahul");
+        if (foundTenant != null) {
+            System.out.println("Tenant Found: " + foundTenant.getName());
+        } else {
+            System.out.println("Tenant not found");
+        }
     }
 }
