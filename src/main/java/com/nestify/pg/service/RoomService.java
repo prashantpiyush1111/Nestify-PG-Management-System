@@ -26,4 +26,24 @@ public class RoomService {
         }
         return null;
     }
+
+    public boolean updateRoomRent(String roomNumber, double newRent) {
+        Room room = findRoomByNumber(roomNumber);
+
+        if (room != null) {
+            room.setRent(newRent);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateRoomAvailability(String roomNumber, boolean available) {
+        Room room = findRoomByNumber(roomNumber);
+
+        if (room != null) {
+            room.setAvailable(available);
+            return true;
+        }
+        return false;
+    }
 }

@@ -16,6 +16,10 @@ public class Complaint {
         this.status = status;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getTenantName() {
         return tenantName;
     }
@@ -30,5 +34,9 @@ public class Complaint {
 
     public String getStatus() {
         return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

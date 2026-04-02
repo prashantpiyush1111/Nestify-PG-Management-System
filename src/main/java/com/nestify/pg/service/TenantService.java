@@ -26,4 +26,14 @@ public class TenantService {
         }
         return null;
     }
+
+    public boolean updateTenantRoom(String tenantName, String newRoom) {
+        Tenant tenant = findTenantByName(tenantName);
+
+        if (tenant != null) {
+            tenant.setAssignedRoomNumber(newRoom);
+            return true;
+        }
+        return false;
+    }
 }

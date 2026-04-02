@@ -9,11 +9,15 @@ public class Payment {
     private String paymentDate;
 
     public Payment(Long id, String tenantName, String roomNumber, double amount, String paymentDate) {
-        this.setId(id);
+        this.id = id;
         this.tenantName = tenantName;
         this.roomNumber = roomNumber;
         this.amount = amount;
         this.paymentDate = paymentDate;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getTenantName() {
@@ -32,11 +36,7 @@ public class Payment {
         return paymentDate;
     }
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

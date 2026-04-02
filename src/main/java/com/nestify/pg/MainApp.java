@@ -24,15 +24,15 @@ public class MainApp {
         roomService.addRoom(room);
 
         // Tenant
-        Tenant tenant = new Tenant(1L, "Prashant ", "9876543210", "Aadhar", "101");
+        Tenant tenant = new Tenant(1L, "Prashant", "9876543210", "Aadhar", "101");
         tenantService.addTenant(tenant);
 
         // Payment
-        Payment payment = new Payment(1L, "Prashant ", "101", 5000, "10 March");
+        Payment payment = new Payment(1L, "Prashant", "101", 5000, "10 March");
         paymentService.addPayment(payment);
 
         // Complaint
-        Complaint complaint = new Complaint(1L, "Prashant ", "101", "Fan not working", "Pending");
+        Complaint complaint = new Complaint(1L, "Prashant", "101", "Fan not working", "Pending");
         complaintService.addComplaint(complaint);
 
         // Output
@@ -40,9 +40,8 @@ public class MainApp {
         System.out.println("Tenant Added: " + tenant.getName());
         System.out.println("Payment Done by: " + payment.getTenantName());
         System.out.println("Complaint: " + complaint.getIssue());
-        
-        
-     // Search Room
+
+        // Search Room
         Room foundRoom = roomService.findRoomByNumber("101");
         if (foundRoom != null) {
             System.out.println("Room Found: " + foundRoom.getRoomNumber());
@@ -51,11 +50,23 @@ public class MainApp {
         }
 
         // Search Tenant
-        Tenant foundTenant = tenantService.findTenantByName("Rahul");
+        Tenant foundTenant = tenantService.findTenantByName("Prashant");
         if (foundTenant != null) {
             System.out.println("Tenant Found: " + foundTenant.getName());
         } else {
             System.out.println("Tenant not found");
+        }
+
+        // Update Room Rent
+        boolean updatedRoom = roomService.updateRoomRent("101", 6000);
+        if (updatedRoom) {
+            System.out.println("Room rent updated");
+        }
+
+        // Update Tenant Room
+        boolean updatedTenant = tenantService.updateTenantRoom("Prashant", "102");
+        if (updatedTenant) {
+            System.out.println("Tenant room updated");
         }
     }
 }

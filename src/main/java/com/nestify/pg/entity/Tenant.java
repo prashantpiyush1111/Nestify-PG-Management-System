@@ -23,6 +23,10 @@ public class Tenant {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -41,5 +45,14 @@ public class Tenant {
 
     public void setAssignedRoomNumber(String assignedRoomNumber) {
         this.assignedRoomNumber = assignedRoomNumber;
+    }
+
+    //  fix for service compatibility
+    public void setRoom(String roomNumber) {
+        this.assignedRoomNumber = roomNumber;
+    }
+
+    public String getRoom() {
+        return this.assignedRoomNumber;
     }
 }

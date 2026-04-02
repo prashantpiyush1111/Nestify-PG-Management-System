@@ -15,4 +15,25 @@ public class ComplaintService {
     public List<Complaint> getAllComplaints() {
         return complaints;
     }
+
+    public Complaint findComplaintByTenantName(String tenantName) {
+        if (tenantName == null) return null;
+
+        for (Complaint complaint : complaints) {
+            if (tenantName.equals(complaint.getTenantName())) {
+                return complaint;
+            }
+        }
+        return null;
+    }
+
+    public boolean updateComplaintStatus(String tenantName, String status) {
+        Complaint complaint = findComplaintByTenantName(tenantName);
+
+        if (complaint != null) {
+            complaint.setStatus(status);
+            return true;
+        }
+        return false;
+    }
 }
