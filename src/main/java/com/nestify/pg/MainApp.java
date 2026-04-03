@@ -1,5 +1,7 @@
 package com.nestify.pg;
 
+import java.sql.Connection;
+
 import com.nestify.pg.entity.Room;
 import com.nestify.pg.entity.Tenant;
 import com.nestify.pg.entity.Payment;
@@ -10,38 +12,50 @@ import com.nestify.pg.service.TenantService;
 import com.nestify.pg.service.PaymentService;
 import com.nestify.pg.service.ComplaintService;
 
+import com.nestify.pg.util.DBConnection;
+
 public class MainApp {
 
     public static void main(String[] args) {
 
+        //  STEP 1: DB Connection Test
+        Connection conn = DBConnection.getConnection();
+
+        if (conn != null) {
+            System.out.println("✅ Database Connected");
+        } else {
+            System.out.println("❌ Database Connection Failed");
+        }
+
+        //  STEP 2: Services
         RoomService roomService = new RoomService();
         TenantService tenantService = new TenantService();
         PaymentService paymentService = new PaymentService();
         ComplaintService complaintService = new ComplaintService();
 
-        // Room
+        //  STEP 3: Room
         Room room = new Room(1L, "101", "Single", 5000, true);
         roomService.addRoom(room);
 
-        // Tenant
+        //  STEP 4: Tenant
         Tenant tenant = new Tenant(1L, "Prashant", "9876543210", "Aadhar", "101");
         tenantService.addTenant(tenant);
 
-        // Payment
+        //  STEP 5: Payment
         Payment payment = new Payment(1L, "Prashant", "101", 5000, "10 March");
         paymentService.addPayment(payment);
 
-        // Complaint
+        //  STEP 6: Complaint
         Complaint complaint = new Complaint(1L, "Prashant", "101", "Fan not working", "Pending");
         complaintService.addComplaint(complaint);
 
-        // Output
+        //  STEP 7: Output
         System.out.println("Room Added: " + room.getRoomNumber());
         System.out.println("Tenant Added: " + tenant.getName());
         System.out.println("Payment Done by: " + payment.getTenantName());
         System.out.println("Complaint: " + complaint.getIssue());
 
-        // Search Room
+        //  STEP 8: Search Room
         Room foundRoom = roomService.findRoomByNumber("101");
         if (foundRoom != null) {
             System.out.println("Room Found: " + foundRoom.getRoomNumber());
@@ -49,7 +63,7 @@ public class MainApp {
             System.out.println("Room not found");
         }
 
-        // Search Tenant
+        //  STEP 9: Search Tenant
         Tenant foundTenant = tenantService.findTenantByName("Prashant");
         if (foundTenant != null) {
             System.out.println("Tenant Found: " + foundTenant.getName());
@@ -57,13 +71,13 @@ public class MainApp {
             System.out.println("Tenant not found");
         }
 
-        // Update Room Rent
+        //  STEP 10: Update Room Rent
         boolean updatedRoom = roomService.updateRoomRent("101", 6000);
         if (updatedRoom) {
             System.out.println("Room rent updated");
         }
 
-        // Update Tenant Room
+        //  STEP 11: Update Tenant Room
         boolean updatedTenant = tenantService.updateTenantRoom("Prashant", "102");
         if (updatedTenant) {
             System.out.println("Tenant room updated");
