@@ -24,9 +24,10 @@ public class MainApp {
         Connection conn = DBConnection.getConnection();
 
         if (conn != null) {
-            System.out.println("✅ Database Connected");
+            System.out.println(" Database Connected");
         } else {
-            System.out.println("❌ Database Connection Failed");
+            System.out.println(" Database Connection Failed");
+            return; //  ADDED: stop execution if DB fails
         }
 
         // STEP 2: Services initialize
@@ -83,6 +84,12 @@ public class MainApp {
         boolean updatedTenant = tenantService.updateTenantRoom("Prashant", "102");
         if (updatedTenant) {
             System.out.println("Tenant room updated");
+        }
+
+        //  ADDED: verify updated tenant room
+        Tenant updated = tenantService.findTenantByName("Prashant");
+        if (updated != null) {
+            System.out.println("Updated Room: " + updated.getAssignedRoomNumber());
         }
 
         // STEP 12: DAO (Database Operations)
