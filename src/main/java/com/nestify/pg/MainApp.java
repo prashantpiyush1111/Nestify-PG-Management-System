@@ -28,6 +28,7 @@ public class MainApp {
             System.out.println("4. View Rooms");
             System.out.println("5. Exit");
             System.out.println("6. Assign Room");
+            System.out.println("7. View Tenants");
 
             int choice = sc.nextInt();
             sc.nextLine();
@@ -97,6 +98,12 @@ public class MainApp {
                     int tenantId = sc.nextInt();
 
                     roomService.assignRoomToTenant(roomId, tenantId);
+                    break;
+                    
+                case 7:
+                    tenantService.getAllTenants().forEach(t ->
+                        System.out.println(t.getName() + " - " + t.getAssignedRoomNumber())
+                    );
                     break;
 
                 default:
