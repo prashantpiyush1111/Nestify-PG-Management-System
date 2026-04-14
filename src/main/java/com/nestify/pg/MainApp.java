@@ -29,6 +29,7 @@ public class MainApp {
             System.out.println("5. Exit");
             System.out.println("6. Assign Room");
             System.out.println("7. View Tenants");
+            System.out.println("8. View Complaints");
 
             int choice = sc.nextInt();
             sc.nextLine();
@@ -103,6 +104,11 @@ public class MainApp {
                 case 7:
                     tenantService.getAllTenants().forEach(t ->
                         System.out.println(t.getName() + " - " + t.getAssignedRoomNumber())
+                    );
+                    break;
+                case 8:
+                    complaintService.getAllComplaints().forEach(c ->
+                        System.out.println(c.getTenantName() + " - " + c.getIssue() + " - " + c.getStatus())
                     );
                     break;
 
