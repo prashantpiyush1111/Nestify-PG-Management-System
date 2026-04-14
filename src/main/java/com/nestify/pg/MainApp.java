@@ -32,6 +32,7 @@ public class MainApp {
             System.out.println("7. View Tenants");
             System.out.println("8. View Complaints");
             System.out.println("9. View Payments");
+            System.out.println("10. Update Complaint Status");
 
             int choice = sc.nextInt();
             sc.nextLine();
@@ -117,6 +118,16 @@ public class MainApp {
                     paymentService.getAllPayments().forEach(p ->
                         System.out.println(p.getTenantName() + " - " + p.getAmount() + " - " + p.getPaymentDate())
                     );
+                    break;
+                case 10:
+                    System.out.print("Enter Complaint ID: ");
+                    int id = sc.nextInt();
+                    sc.nextLine();
+
+                    System.out.print("Enter New Status: ");
+                    String status = sc.nextLine();
+
+                    complaintService.updateComplaintStatus(id, status);
                     break;
 
                 default:
