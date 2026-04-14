@@ -15,12 +15,13 @@ public class ComplaintDAO {
     public void addComplaint(Complaint complaint) {
         try {
             Connection con = DBConnection.getConnection();
-            String query = "INSERT INTO complaint (tenant_id, description, status) VALUES (?, ?, ?)";
+            String query = "INSERT INTO complaint (tenant_name, room_number, description, status) VALUES (?, ?, ?, ?)";
             PreparedStatement ps = con.prepareStatement(query);
 
-            ps.setInt(1, complaint.getTenantId());
-            ps.setString(2, complaint.getDescription());
-            ps.setString(3, complaint.getStatus());
+            ps.setString(1, complaint.getTenantName());
+            ps.setString(2, complaint.getRoomNumber());
+            ps.setString(3, complaint.getIssue());
+            ps.setString(4, complaint.getStatus());
 
             ps.executeUpdate();
             System.out.println("Complaint added successfully");
@@ -41,11 +42,13 @@ public class ComplaintDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                Complaint c = new Complaint();
-                c.setId(rs.getInt("id"));
-                c.setTenantId(rs.getInt("tenant_id"));
-                c.setDescription(rs.getString("description"));
-                c.setStatus(rs.getString("status"));
+                Complaint c = new Complaint(
+                    (long) rs.getInt("id"),
+                    rs.getString("tenant_name"),
+                    rs.getString("room_number"),
+                    rs.getString("description"),
+                    rs.getString("status")
+                );
 
                 list.add(c);
             }
