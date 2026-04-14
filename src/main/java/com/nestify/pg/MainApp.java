@@ -33,6 +33,7 @@ public class MainApp {
             System.out.println("8. View Complaints");
             System.out.println("9. View Payments");
             System.out.println("10. Update Complaint Status");
+            System.out.println("11. Delete Complaint");
 
             int choice = sc.nextInt();
             sc.nextLine();
@@ -128,6 +129,12 @@ public class MainApp {
                     String status = sc.nextLine();
 
                     complaintService.updateComplaintStatus(id, status);
+                    break;
+                case 11:
+                    System.out.print("Enter Complaint ID: ");
+                    int deleteId = sc.nextInt();
+
+                    complaintService.deleteComplaint(deleteId);
                     break;
 
                 default:
