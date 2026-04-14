@@ -134,7 +134,7 @@ public class MainApp {
                     System.out.print("Enter Complaint ID: ");
                     int deleteId = sc.nextInt();
 
-                    complaintService.deleteComplaintt(deleteId);
+                    complaintService.deleteComplaint(deleteId);
                     break;
 
                 default:
