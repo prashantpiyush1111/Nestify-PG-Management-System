@@ -5,7 +5,7 @@ import java.util.Scanner;
 import com.nestify.pg.entity.Room;
 import com.nestify.pg.entity.Tenant;
 import com.nestify.pg.entity.Complaint;
-
+import com.nestify.pg.service.PaymentService;
 import com.nestify.pg.service.RoomService;
 import com.nestify.pg.service.TenantService;
 import com.nestify.pg.service.ComplaintService;
@@ -19,6 +19,7 @@ public class MainApp {
         RoomService roomService = new RoomService();
         TenantService tenantService = new TenantService();
         ComplaintService complaintService = new ComplaintService();
+        PaymentService paymentService = new PaymentService();
 
         while (true) {
             System.out.println("\n==== PG MANAGEMENT ====");
@@ -113,8 +114,8 @@ public class MainApp {
                     );
                     break;
                 case 9:
-                    PaymentService.getAllPayments().forEach(p ->
-                        System.out.println(p.getTenantName() + " - " + p.getAmount() + " - " + p.getDate())
+                    paymentService.getAllPayments().forEach(p ->
+                        System.out.println(p.getTenantName() + " - " + p.getAmount() + " - " + p.getPaymentDate())
                     );
                     break;
 
