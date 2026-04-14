@@ -30,6 +30,7 @@ public class MainApp {
             System.out.println("6. Assign Room");
             System.out.println("7. View Tenants");
             System.out.println("8. View Complaints");
+            System.out.println("9. View Payments");
 
             int choice = sc.nextInt();
             sc.nextLine();
@@ -109,6 +110,11 @@ public class MainApp {
                 case 8:
                     complaintService.getAllComplaints().forEach(c ->
                         System.out.println(c.getTenantName() + " - " + c.getIssue() + " - " + c.getStatus())
+                    );
+                    break;
+                case 9:
+                    PaymentService.getAllPayments().forEach(p ->
+                        System.out.println(p.getTenantName() + " - " + p.getAmount() + " - " + p.getDate())
                     );
                     break;
 
