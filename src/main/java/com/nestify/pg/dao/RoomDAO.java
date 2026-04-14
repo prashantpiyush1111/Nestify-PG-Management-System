@@ -18,10 +18,10 @@ public class RoomDAO {
             String query = "INSERT INTO room (room_no, type, rent, status) VALUES (?, ?, ?, ?)";
             PreparedStatement ps = con.prepareStatement(query);
 
-            ps.setString(1, room.getRoomNo());
-            ps.setString(2, room.getType());
+            ps.setString(1, room.getRoomNumber());
+            ps.setString(2, room.getRoomType());
             ps.setDouble(3, room.getRent());
-            ps.setString(4, room.getStatus());
+            ps.setString(4, room.isAvailable() ? "Available" : "Occupied");
 
             ps.executeUpdate();
             System.out.println("Room added successfully");
@@ -43,11 +43,11 @@ public class RoomDAO {
 
             while (rs.next()) {
                 Room room = new Room();
-                room.setId(rs.getInt("id"));
-                room.setRoomNo(rs.getString("room_no"));
-                room.setType(rs.getString("type"));
+                room.setId((long) rs.getInt("id"));
+                room.setRoomNumber(rs.getString("room_no"));
+                room.setRoomType(rs.getString("type"));
                 room.setRent(rs.getDouble("rent"));
-                room.setStatus(rs.getString("status"));
+                room.setAvailable("Available".equals(rs.getString("status")));
 
                 rooms.add(room);
             }
@@ -64,13 +64,11 @@ public class RoomDAO {
         try {
             Connection con = DBConnection.getConnection();
 
-            // Update room status
             String roomQuery = "UPDATE room SET status = 'Occupied' WHERE id = ?";
             PreparedStatement ps1 = con.prepareStatement(roomQuery);
             ps1.setInt(1, roomId);
             ps1.executeUpdate();
 
-            // Update tenant with room id
             String tenantQuery = "UPDATE tenant SET room_id = ? WHERE id = ?";
             PreparedStatement ps2 = con.prepareStatement(tenantQuery);
             ps2.setInt(1, roomId);
