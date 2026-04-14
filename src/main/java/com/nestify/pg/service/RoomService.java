@@ -44,6 +44,11 @@ public class RoomService {
             room.setAvailable(available);
             return true;
         }
+        
         return false;
+    }
+    public void assignRoomToTenant(int roomId, int tenantId) {
+        com.nestify.pg.dao.RoomDAO roomDAO = new com.nestify.pg.dao.RoomDAO();
+        roomDAO.assignRoomToTenant(roomId, tenantId);
     }
 }
