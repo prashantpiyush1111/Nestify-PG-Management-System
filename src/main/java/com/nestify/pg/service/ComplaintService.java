@@ -1,6 +1,7 @@
 package com.nestify.pg.service;
 
 import com.nestify.pg.entity.Complaint;
+import com.nestify.pg.dao.ComplaintDAO;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,5 +36,9 @@ public class ComplaintService {
             return true;
         }
         return false;
+    }
+    public void updateComplaintStatus(int id, String status) {
+        ComplaintDAO dao = new ComplaintDAO();
+        dao.updateComplaintStatus(id, status);
     }
 }
