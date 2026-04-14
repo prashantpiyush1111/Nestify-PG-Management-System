@@ -27,6 +27,7 @@ public class MainApp {
             System.out.println("3. Add Complaint");
             System.out.println("4. View Rooms");
             System.out.println("5. Exit");
+            System.out.println("6. Assign Room");
 
             int choice = sc.nextInt();
             sc.nextLine();
@@ -88,6 +89,15 @@ public class MainApp {
                     System.out.println("Exiting...");
                     sc.close();
                     System.exit(0);
+                case 6:
+                    System.out.print("Room ID: ");
+                    int roomId = sc.nextInt();
+
+                    System.out.print("Tenant ID: ");
+                    int tenantId = sc.nextInt();
+
+                    roomService.assignRoomToTenant(roomId, tenantId);
+                    break;
 
                 default:
                     System.out.println("Invalid choice");
