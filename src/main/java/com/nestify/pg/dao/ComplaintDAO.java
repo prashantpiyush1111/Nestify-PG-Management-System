@@ -11,7 +11,7 @@ import com.nestify.pg.util.DBConnection;
 
 public class ComplaintDAO {
 
-    // Add Complaint
+    // Add Complaint 
     public void addComplaint(Complaint complaint) {
         try {
             Connection con = DBConnection.getConnection();
@@ -52,7 +52,6 @@ public class ComplaintDAO {
 
                 list.add(c);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }

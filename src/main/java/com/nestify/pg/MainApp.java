@@ -1,70 +1,97 @@
 package com.nestify.pg;
 
+import java.util.Scanner;
+
 import com.nestify.pg.entity.Room;
 import com.nestify.pg.entity.Tenant;
-import com.nestify.pg.entity.Payment;
 import com.nestify.pg.entity.Complaint;
 
 import com.nestify.pg.service.RoomService;
 import com.nestify.pg.service.TenantService;
-import com.nestify.pg.service.PaymentService;
 import com.nestify.pg.service.ComplaintService;
 
 public class MainApp {
 
     public static void main(String[] args) {
 
+        Scanner sc = new Scanner(System.in);
+
         RoomService roomService = new RoomService();
         TenantService tenantService = new TenantService();
-        PaymentService paymentService = new PaymentService();
         ComplaintService complaintService = new ComplaintService();
 
-        // Room
-        Room room = new Room(1L, "101", "Single", 5000, true);
-        roomService.addRoom(room);
+        while (true) {
+            System.out.println("\n==== PG MANAGEMENT ====");
+            System.out.println("1. Add Room");
+            System.out.println("2. Add Tenant");
+            System.out.println("3. Add Complaint");
+            System.out.println("4. View Rooms");
+            System.out.println("5. Exit");
 
-        // Tenant
-        Tenant tenant = new Tenant(1L, "Prashant", "9876543210", "Aadhar", "101");
-        tenantService.addTenant(tenant);
+            int choice = sc.nextInt();
+            sc.nextLine();
 
-        // Payment
-        Payment payment = new Payment(1L, "Prashant", "101", 5000, "10 March");
-        paymentService.addPayment(payment);
+            switch (choice) {
 
-        // Complaint
-        Complaint complaint = new Complaint(1L, "Prashant", "101", "Fan not working", "Pending");
-        complaintService.addComplaint(complaint);
+                case 1:
+                    System.out.print("Room No: ");
+                    String roomNo = sc.nextLine();
 
-        // Output
-        System.out.println("Room Added: " + room.getRoomNumber());
-        System.out.println("Tenant Added: " + tenant.getName());
-        System.out.println("Payment Done by: " + payment.getTenantName());
-        System.out.println("Complaint: " + complaint.getIssue());
+                    System.out.print("Type: ");
+                    String type = sc.nextLine();
 
-        // Search Room
-        Room foundRoom = roomService.findRoomByNumber("101");
-        if (foundRoom != null) {
-            System.out.println("Room Found: " + foundRoom.getRoomNumber());
-        }
+                    System.out.print("Rent: ");
+                    double rent = sc.nextDouble();
 
-        // Search Tenant
-        Tenant foundTenant = tenantService.findTenantByName("Prashant");
-        if (foundTenant != null) {
-            System.out.println("Tenant Found: " + foundTenant.getName());
-        } else {
-            System.out.println("Tenant not found");
-        }
+                    Room room = new Room(0L, roomNo, type, rent, true);
+                    roomService.addRoom(room);
+                    break;
 
-        // Update Room Rent
-        boolean updatedRoom = roomService.updateRoomRent("101", 6000);
-        if (updatedRoom) {
-            System.out.println("Room rent updated");
-        }
+                case 2:
+                    System.out.print("Name: ");
+                    String name = sc.nextLine();
 
-        // Update Tenant Room
-        boolean updatedTenant = tenantService.updateTenantRoom("Prashant", "102");
-        if (updatedTenant) {
-            System.out.println("Tenant room updated");
+                    System.out.print("Phone: ");
+                    String phone = sc.nextLine();
+
+                    System.out.print("ID Proof: ");
+                    String idProof = sc.nextLine();
+
+                    System.out.print("Room No: ");
+                    String rNo = sc.nextLine();
+
+                    Tenant tenant = new Tenant(0L, name, phone, idProof, rNo);
+                    tenantService.addTenant(tenant);
+                    break;
+
+                case 3:
+                    System.out.print("Tenant Name: ");
+                    String tName = sc.nextLine();
+
+                    System.out.print("Room No: ");
+                    String rn = sc.nextLine();
+
+                    System.out.print("Issue: ");
+                    String issue = sc.nextLine();
+
+                    Complaint complaint = new Complaint(0L, tName, rn, issue, "Pending");
+                    complaintService.addComplaint(complaint);
+                    break;
+
+                case 4:
+                    roomService.getAllRooms().forEach(r ->
+                        System.out.println(r.getRoomNumber() + " - " + r.getRoomType())
+                    );
+                    break;
+
+                case 5:
+                    System.out.println("Exiting...");
+                    sc.close();
+                    System.exit(0);
+
+                default:
+                    System.out.println("Invalid choice");
+            }
         }
     }
 }
