@@ -2,43 +2,29 @@ package com.nestify.pg.service;
 
 import com.nestify.pg.entity.Complaint;
 import com.nestify.pg.dao.ComplaintDAO;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ComplaintService {
 
-    private List<Complaint> complaints = new ArrayList<>();
+    private ComplaintDAO dao = new ComplaintDAO();
 
+    // Add Complaint (DB me save karega)
     public void addComplaint(Complaint complaint) {
-        complaints.add(complaint);
+        dao.addComplaint(complaint);
     }
 
+    // Get All Complaints (DB se fetch karega)
     public List<Complaint> getAllComplaints() {
-        return complaints;
+        return dao.getAllComplaints();
     }
 
-    public Complaint findComplaintByTenantName(String tenantName) {
-        if (tenantName == null) return null;
-
-        for (Complaint complaint : complaints) {
-            if (tenantName.equals(complaint.getTenantName())) {
-                return complaint;
-            }
-        }
-        return null;
-    }
-
-    public boolean updateComplaintStatus(String tenantName, String status) {
-        Complaint complaint = findComplaintByTenantName(tenantName);
-
-        if (complaint != null) {
-            complaint.setStatus(status);
-            return true;
-        }
-        return false;
-    }
+    // Update Complaint Status (by ID)
     public void updateComplaintStatus(int id, String status) {
-        ComplaintDAO dao = new ComplaintDAO();
         dao.updateComplaintStatus(id, status);
+    }
+
+    // Delete Complaint (by ID)
+    public void deleteComplaint(int id) {
+        dao.deleteComplaint(id);
     }
 }
