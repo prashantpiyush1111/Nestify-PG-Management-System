@@ -76,4 +76,24 @@ public class ComplaintDAO {
             e.printStackTrace();
         }
     }
+    public void deleteComplaint(int id) {
+        try {
+            Connection con = DBConnection.getConnection();
+            String query = "DELETE FROM complaint WHERE id = ?";
+            PreparedStatement ps = con.prepareStatement(query);
+
+            ps.setInt(1, id);
+
+            int rows = ps.executeUpdate();
+
+            if (rows > 0) {
+                System.out.println("Complaint deleted successfully");
+            } else {
+                System.out.println("Complaint not found");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
