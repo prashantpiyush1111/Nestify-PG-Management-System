@@ -9,12 +9,40 @@ import com.nestify.pg.service.PaymentService;
 import com.nestify.pg.service.RoomService;
 import com.nestify.pg.service.TenantService;
 import com.nestify.pg.service.ComplaintService;
+import com.nestify.pg.service.AuthService;
+import com.nestify.pg.entity.User;
 
 public class MainApp {
 
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
+        
+        AuthService authService = new AuthService();
+
+        System.out.print("Enter Username: ");
+        String username = sc.nextLine();
+
+        System.out.print("Enter Password: ");
+        String password = sc.nextLine();
+
+        User user = authService.login(username, password);
+
+        if (user == null) {
+            System.out.println("Invalid Login!");
+            sc.close();
+            return;
+        }
+  
+        
+
+        if (user.getRole().equals("ADMIN")) {
+            System.out.println("Welcome Admin");
+            // Admin menu call
+        } else {
+            System.out.println("Welcome Tenant");
+            // Tenant menu call
+        }
 
         RoomService roomService = new RoomService();
         TenantService tenantService = new TenantService();
@@ -95,6 +123,7 @@ public class MainApp {
                     System.out.println("Exiting...");
                     sc.close();
                     System.exit(0);
+                    break;
                 case 6:
                     System.out.print("Room ID: ");
                     int roomId = sc.nextInt();
