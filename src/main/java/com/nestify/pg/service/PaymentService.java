@@ -31,15 +31,27 @@ public class PaymentService {
         Payment payment = findPaymentByTenantName(tenantName);
 
         if (payment != null) {
-            payment = new Payment(
-                payment.getId(),
-                payment.getTenantName(),
-                payment.getRoomNumber(),
-                amount,
-                payment.getPaymentDate()
-            );
+            payment.setAmount(amount);
+
             return true;
         }
         return false;
+    }
+
+    public void checkDuePayments() {
+        for (Payment p : payments) {
+            if (p.getStatus().equals("PENDING")) {
+                System.out.println(p.getTenantName() + " | " + p.getAmount() + " | Due: " + p.getDueDate());
+            }
+        }
+    }
+
+    public void markAsPaid(Long id) {
+        for (Payment p : payments) {
+            if (p.getId().equals(id)) {
+                p.setStatus("PAID");
+                System.out.println("Payment marked as PAID");
+            }
+        }
     }
 }
