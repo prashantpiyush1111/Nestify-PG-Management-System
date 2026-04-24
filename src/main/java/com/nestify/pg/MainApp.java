@@ -11,6 +11,7 @@ import com.nestify.pg.service.TenantService;
 import com.nestify.pg.service.ComplaintService;
 import com.nestify.pg.service.AuthService;
 import com.nestify.pg.entity.User;
+import com.nestify.pg.entity.Payment;
 
 public class MainApp {
 
@@ -62,6 +63,7 @@ public class MainApp {
             System.out.println("9. View Payments");
             System.out.println("10. Update Complaint Status");
             System.out.println("11. Delete Complaint");
+            System.out.println("12. Make Payment");
 
             int choice = sc.nextInt();
             sc.nextLine();
@@ -146,7 +148,7 @@ public class MainApp {
                     break;
                 case 9:
                     paymentService.getAllPayments().forEach(p ->
-                        System.out.println(p.getTenantName() + " - " + p.getAmount() + " - " + p.getPaymentDate())
+                    System.out.println(p.getTenantName() + " - " + p.getAmount() + " - " + p.getStatus())
                     );
                     break;
                 case 10:
@@ -165,7 +167,32 @@ public class MainApp {
 
                     complaintService.deleteComplaint(deleteId);
                     break;
+                case 12:
+                    System.out.print("Enter Tenant Name: ");
+                    String pname = sc.nextLine();
 
+                    System.out.print("Enter Amount: ");
+                    double amt = sc.nextDouble();
+                    sc.nextLine();
+
+                    Payment payment = new Payment(
+                        1L,
+                        pname,
+                        "101",
+                        amt,
+                        "2026-04-24",
+                        "2026-04-30",
+                        "PENDING"
+                    );
+
+                    paymentService.addPayment(payment);
+
+                    System.out.println("Payment Successful");
+
+                    paymentService.markAsPaid(payment.getId());
+
+                    break;
+                    
                 default:
                     System.out.println("Invalid choice");
             }
