@@ -1,17 +1,18 @@
 package com.nestify.pg.entity;
 
+
 public class User {
     private String username;
     private String password;
-    private String role; // ADMIN / TENANT
+    private Role role;
 
-    public User(String username, String password, String role) {
+    public User(String username, String password, Role role) {
         this.username = username;
         this.password = password;
         this.role = role;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
