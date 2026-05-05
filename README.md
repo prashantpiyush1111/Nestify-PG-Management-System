@@ -85,7 +85,7 @@ src/main/java/com/nestify/pg
 ## ▶️ How to Run
 
 1. Clone the repository:
-   git clone https://github.com/your-username/nestify-pg-management-system.git
+   git clone https://github.com/prashantpiyush1111/nestify-pg-management-system.git 
 
 2. Open in IntelliJ or Eclipse
 
@@ -146,4 +146,4 @@ Feel free to fork and contribute.
 
 ## 📜 License
 
-MIT License 
+MIT License
