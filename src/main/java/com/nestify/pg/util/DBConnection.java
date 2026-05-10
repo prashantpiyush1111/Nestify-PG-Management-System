@@ -5,15 +5,15 @@ import java.sql.DriverManager;
 
 public class DBConnection {
 
+    private static final String URL = "jdbc:mysql://localhost:3306/nestify_pg";
+    private static final String USER = "root";
+    private static final String PASSWORD = "230825"; 
     public static Connection getConnection() {
         try {
-            return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/nestify_pg",
-                "root",
-                "230825"
-            );
+            Class.forName("com.mysql.cj.jdbc.Driver"); 
+            return DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("❌ DB Connection failed: " + e.getMessage());
             return null;
         }
     }
