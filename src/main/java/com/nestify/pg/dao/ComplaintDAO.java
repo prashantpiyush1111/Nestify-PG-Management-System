@@ -18,7 +18,7 @@ public class ComplaintDAO {
 
             ps.setString(1, complaint.getTenantName());
             ps.setString(2, complaint.getRoomNumber());
-            ps.setString(3, complaint.getDescription()); 
+            ps.setString(3, complaint.getIssue());
             ps.setString(4, complaint.getStatus());
             ps.executeUpdate();
             System.out.println("Complaint added successfully");
