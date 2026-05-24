@@ -39,7 +39,7 @@ public class MainApp {
 
         if (user.getRole().equals("ADMIN")) {
             System.out.println("Welcome Admin");
-            // Admin menu call
+         
         } else {
             System.out.println("Welcome Tenant");
             // Tenant menu call
