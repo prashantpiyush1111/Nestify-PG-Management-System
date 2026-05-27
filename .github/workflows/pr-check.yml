@@ -1,4 +1,4 @@
-name: PR Checker Bot
+name: Prashant's PR Checker Bot
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - name: PR Validate karo
+      - name: Validate PR
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -17,14 +17,14 @@ jobs:
             const body = pr.body || '';
             let problems = [];
 
-            // Check 1: Issue linked hai?
+            // Check 1: Is an issue linked?
             if (!body.match(/(?:fixes|closes|resolves)\s#(\d+)/i)) {
-              problems.push('❌ Issue linked nahi hai — likho `Fixes #ISSUE_NUMBER`');
+              problems.push('❌ No issue linked — please write `Fixes #ISSUE_NUMBER` in your description');
             }
 
-            // Check 2: Description hai?
+            // Check 2: Is there a proper description?
             if (body.trim().length < 20) {
-              problems.push('❌ PR description bahut choti hai');
+              problems.push('❌ PR description is too short — please add more details');
             }
 
             if (problems.length > 0) {
@@ -32,7 +32,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: pr.number,
-                body: `Hey @${pr.user.login}! Pehle yeh fix karo:\n\n${problems.join('\n')}`
+                body: `Hey @${pr.user.login}! Please fix the following before this PR can be reviewed:\n\n${problems.join('\n')}`
               });
             } else {
               await github.rest.issues.addLabels({
@@ -45,6 +45,6 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: pr.number,
-                body: `✅ Sab sahi hai @${pr.user.login}! Review ka wait karo.`
+                body: `✅ Everything looks good @${pr.user.login}! Your PR is ready for review.`
               });
             }
