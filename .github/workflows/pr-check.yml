@@ -1,0 +1,50 @@
+name: PR Checker Bot
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: PR Validate karo
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const body = pr.body || '';
+            let problems = [];
+
+            // Check 1: Issue linked hai?
+            if (!body.match(/(?:fixes|closes|resolves)\s#(\d+)/i)) {
+              problems.push('❌ Issue linked nahi hai — likho `Fixes #ISSUE_NUMBER`');
+            }
+
+            // Check 2: Description hai?
+            if (body.trim().length < 20) {
+              problems.push('❌ PR description bahut choti hai');
+            }
+
+            if (problems.length > 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: `Hey @${pr.user.login}! Pehle yeh fix karo:\n\n${problems.join('\n')}`
+              });
+            } else {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                labels: ['ready-for-review']
+              });
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pr.number,
+                body: `✅ Sab sahi hai @${pr.user.login}! Review ka wait karo.`
+              });
+            }
