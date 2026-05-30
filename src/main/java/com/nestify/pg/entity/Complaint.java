@@ -1,42 +1,28 @@
 package com.nestify.pg.entity;
 
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
+@Entity
+@Table(name = "complaint")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Complaint {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "tenant_name")
     private String tenantName;
+
+    @Column(name = "room_number")
     private String roomNumber;
+
     private String issue;
+
     private String status;
-
-    public Complaint(Long id, String tenantName, String roomNumber, String issue, String status) {
-        this.id = id;
-        this.tenantName = tenantName;
-        this.roomNumber = roomNumber;
-        this.issue = issue;
-        this.status = status;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTenantName() {
-        return tenantName;
-    }
-
-    public String getRoomNumber() {
-        return roomNumber;
-    }
-
-    public String getIssue() {
-        return issue;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }
