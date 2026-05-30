@@ -1,25 +1,58 @@
 package com.nestify.pg.service;
 
-import com.nestify.pg.entity.User;
-import java.util.ArrayList;
-import java.util.List;
 import com.nestify.pg.entity.Role;
+import com.nestify.pg.entity.User;
+import com.nestify.pg.repository.UserRepository;
+import com.nestify.pg.util.JwtUtil;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+@Service
 public class AuthService {
 
-	private static List<User> users = new ArrayList<>();
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-	static {
-		users.add(new User("admin", "admin123", Role.ADMIN));
-		users.add(new User("tenant1", "1234", Role.TENANT));
-	}
+    public AuthService(UserRepository userRepository,
+                       PasswordEncoder passwordEncoder,
+                       JwtUtil jwtUtil) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+    }
 
-	public User login(String username, String password) {
-		for (User user : users) {
-			if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-				return user;
-			}
-		}
-		return null;
-	}
+    public Map<String, String> login(String username, String password) {
+        Optional<User> userOpt = userRepository.findByUsername(username);
+
+        if (userOpt.isEmpty()) {
+            throw new RuntimeException("User not found");
+        }
+
+        User user = userOpt.get();
+
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid password");
+        }
+
+        String token = jwtUtil.generateToken(username, user.getRole().name());
+
+        Map<String, String> response = new HashMap<>();
+        response.put("token", token);
+        response.put("role", user.getRole().name());
+        response.put("username", username);
+        return response;
+    }
+
+    public User register(String username, String password, Role role) {
+        if (userRepository.findByUsername(username).isPresent()) {
+            throw new RuntimeException("Username already exists");
+        }
+        User user = new User(null, username, passwordEncoder.encode(password), role);
+        return userRepository.save(user);
+    }
 }
