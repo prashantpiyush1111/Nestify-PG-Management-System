@@ -1,52 +1,34 @@
 package com.nestify.pg.entity;
 
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
+@Entity
+@Table(name = "payment")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Payment {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "tenant_name")
     private String tenantName;
+
+    @Column(name = "room_number")
     private String roomNumber;
+
     private double amount;
+
+    @Column(name = "payment_date")
     private String paymentDate;
 
+    @Column(name = "due_date")
     private String dueDate;
-    private String status; 
 
-    public Payment(Long id, String tenantName, String roomNumber,
-                   double amount, String paymentDate,
-                   String dueDate, String status) {
-
-        this.id = id;
-        this.tenantName = tenantName;
-        this.roomNumber = roomNumber;
-        this.amount = amount;
-        this.paymentDate = paymentDate;
-        this.dueDate = dueDate;
-        this.status = status;
-    }
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public Payment(Long id, String tenantName, String roomNumber,
-                   double amount, String paymentDate) {
-
-        this.id = id;
-        this.tenantName = tenantName;
-        this.roomNumber = roomNumber;
-        this.amount = amount;
-        this.paymentDate = paymentDate;
-        this.dueDate = "N/A";
-        this.status = "PENDING";
-    }
-
-    public Long getId() { return id; }
-    public String getTenantName() { return tenantName; }
-    public String getRoomNumber() { return roomNumber; }
-    public double getAmount() { return amount; }
-    public String getPaymentDate() { return paymentDate; }
-    public String getDueDate() { return dueDate; }
-    public String getStatus() { return status; }
-
-    public void setId(Long id) { this.id = id; }
-    public void setStatus(String status) { this.status = status; }
+    private String status;
 }

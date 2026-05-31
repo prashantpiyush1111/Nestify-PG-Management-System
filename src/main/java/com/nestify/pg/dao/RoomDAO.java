@@ -13,47 +13,44 @@ public class RoomDAO {
 
     // Add Room
     public void addRoom(Room room) {
-        try {
-            Connection con = DBConnection.getConnection();
-            String query = "INSERT INTO room (room_no, type, rent, status) VALUES (?, ?, ?, ?)";
-            PreparedStatement ps = con.prepareStatement(query);
+        String query = "INSERT INTO room (room_number, room_type, rent, available) VALUES (?, ?, ?, ?)";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
 
             ps.setString(1, room.getRoomNumber());
             ps.setString(2, room.getRoomType());
             ps.setDouble(3, room.getRent());
-            ps.setString(4, room.isAvailable() ? "Available" : "Occupied");
+            ps.setBoolean(4, room.isAvailable());
 
             ps.executeUpdate();
             System.out.println("Room added successfully");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Error adding room: " + e.getMessage());
         }
     }
 
     // Get All Rooms
     public List<Room> getAllRooms() {
         List<Room> rooms = new ArrayList<>();
+        String query = "SELECT * FROM room";
 
-        try {
-            Connection con = DBConnection.getConnection();
-            String query = "SELECT * FROM room";
-            PreparedStatement ps = con.prepareStatement(query);
-            ResultSet rs = ps.executeQuery();
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 Room room = new Room();
-                room.setId((long) rs.getInt("id"));
-                room.setRoomNumber(rs.getString("room_no"));
-                room.setRoomType(rs.getString("type"));
+                room.setId(rs.getLong("id"));
+                room.setRoomNumber(rs.getString("room_number"));
+                room.setRoomType(rs.getString("room_type"));
                 room.setRent(rs.getDouble("rent"));
-                room.setAvailable("Available".equals(rs.getString("status")));
-
+                room.setAvailable(rs.getBoolean("available"));
                 rooms.add(room);
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Error fetching rooms: " + e.getMessage());
         }
 
         return rooms;
@@ -61,16 +58,16 @@ public class RoomDAO {
 
     // Assign Room to Tenant
     public void assignRoomToTenant(int roomId, int tenantId) {
-        try {
-            Connection con = DBConnection.getConnection();
+        String roomQuery = "UPDATE room SET available = false WHERE id = ?";
+        String tenantQuery = "UPDATE tenant SET room_number = (SELECT room_number FROM room WHERE id = ?) WHERE id = ?";
 
-            String roomQuery = "UPDATE room SET status = 'Occupied' WHERE id = ?";
-            PreparedStatement ps1 = con.prepareStatement(roomQuery);
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps1 = con.prepareStatement(roomQuery);
+             PreparedStatement ps2 = con.prepareStatement(tenantQuery)) {
+
             ps1.setInt(1, roomId);
             ps1.executeUpdate();
 
-            String tenantQuery = "UPDATE tenant SET room_id = ? WHERE id = ?";
-            PreparedStatement ps2 = con.prepareStatement(tenantQuery);
             ps2.setInt(1, roomId);
             ps2.setInt(2, tenantId);
             ps2.executeUpdate();
@@ -78,7 +75,7 @@ public class RoomDAO {
             System.out.println("Room assigned successfully");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Error assigning room: " + e.getMessage());
         }
     }
 }

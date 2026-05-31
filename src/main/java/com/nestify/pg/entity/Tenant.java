@@ -1,45 +1,30 @@
 package com.nestify.pg.entity;
 
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+
+@Entity
+@Table(name = "tenant")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Tenant {
 
-	private Long id;
-	private String name;
-	private String phoneNumber;
-	private String idProof;
-	private String assignedRoomNumber;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	public Tenant() {
-	}
+    @Column(nullable = false)
+    private String name;
 
-	public Tenant(Long id, String name, String phoneNumber, String idProof, String assignedRoomNumber) {
-		this.id = id;
-		this.name = name;
-		this.phoneNumber = phoneNumber;
-		this.idProof = idProof;
-		this.assignedRoomNumber = assignedRoomNumber;
-	}
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
-	public Long getId() {
-		return id;
-	}
+    @Column(name = "id_proof")
+    private String idProof;
 
-	public String getName() {
-		return name;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public String getIdProof() {
-		return idProof;
-	}
-
-	public String getAssignedRoomNumber() {
-		return assignedRoomNumber;
-	}
-
-	public void setAssignedRoomNumber(String assignedRoomNumber) {
-		this.assignedRoomNumber = assignedRoomNumber;
-	}
+    @Column(name = "room_number")
+    private String assignedRoomNumber;
 }

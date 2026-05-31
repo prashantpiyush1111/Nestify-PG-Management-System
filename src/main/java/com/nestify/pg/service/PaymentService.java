@@ -1,57 +1,43 @@
 package com.nestify.pg.service;
 
 import com.nestify.pg.entity.Payment;
-import java.util.ArrayList;
+import com.nestify.pg.repository.PaymentRepository;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.List;
 
+@Service
 public class PaymentService {
 
-    private List<Payment> payments = new ArrayList<>();
+    private final PaymentRepository paymentRepository;
 
-    public void addPayment(Payment payment) {
-        payments.add(payment);
+    public PaymentService(PaymentRepository paymentRepository) {
+        this.paymentRepository = paymentRepository;
+    }
+
+    public Payment addPayment(Payment payment) {
+        payment.setPaymentDate(LocalDate.now().toString());
+        payment.setStatus("PENDING");
+        return paymentRepository.save(payment);
     }
 
     public List<Payment> getAllPayments() {
-        return payments;
+        return paymentRepository.findAll();
     }
 
-    public Payment findPaymentByTenantName(String tenantName) {
-        if (tenantName == null) return null;
-
-        for (Payment payment : payments) {
-            if (tenantName.equals(payment.getTenantName())) {
-                return payment;
-            }
-        }
-        return null;
+    public List<Payment> getPaymentsByTenant(String tenantName) {
+        return paymentRepository.findByTenantName(tenantName);
     }
 
-    public boolean updatePaymentAmount(String tenantName, double amount) {
-        Payment payment = findPaymentByTenantName(tenantName);
-
-        if (payment != null) {
-            payment.setAmount(amount);
-
-            return true;
-        }
-        return false;
+    public Payment markAsPaid(Long id) {
+        Payment payment = paymentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Payment not found"));
+        payment.setStatus("PAID");
+        return paymentRepository.save(payment);
     }
 
-    public void checkDuePayments() {
-        for (Payment p : payments) {
-            if (p.getStatus().equals("PENDING")) {
-                System.out.println(p.getTenantName() + " | " + p.getAmount() + " | Due: " + p.getDueDate());
-            }
-        }
-    }
-
-    public void markAsPaid(Long id) {
-        for (Payment p : payments) {
-            if (p.getId().equals(id)) {
-                p.setStatus("PAID");
-                System.out.println("Payment marked as PAID");
-            }
-        }
+    public List<Payment> getPendingPayments() {
+        return paymentRepository.findByStatus("PENDING");
     }
 }

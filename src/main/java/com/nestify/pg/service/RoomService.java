@@ -1,54 +1,46 @@
 package com.nestify.pg.service;
 
 import com.nestify.pg.entity.Room;
-import java.util.ArrayList;
+import com.nestify.pg.repository.RoomRepository;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service
 public class RoomService {
 
-    private List<Room> rooms = new ArrayList<>();
+    private final RoomRepository roomRepository;
 
-    public void addRoom(Room room) {
-        rooms.add(room);
+    public RoomService(RoomRepository roomRepository) {
+        this.roomRepository = roomRepository;
+    }
+
+    public Room addRoom(Room room) {
+        room.setAvailable(true);
+        return roomRepository.save(room);
     }
 
     public List<Room> getAllRooms() {
-        return rooms;
+        return roomRepository.findAll();
     }
 
-    public Room findRoomByNumber(String roomNumber) {
-        if (roomNumber == null) return null;
-
-        for (Room room : rooms) {
-            if (roomNumber.equals(room.getRoomNumber())) {
-                return room;
-            }
-        }
-        return null;
+    public Room updateRoom(Long id, Room updated) {
+        Room room = roomRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Room not found"));
+        room.setRoomType(updated.getRoomType());
+        room.setRent(updated.getRent());
+        room.setAvailable(updated.isAvailable());
+        return roomRepository.save(room);
     }
 
-    public boolean updateRoomRent(String roomNumber, double newRent) {
-        Room room = findRoomByNumber(roomNumber);
-
-        if (room != null) {
-            room.setRent(newRent);
-            return true;
-        }
-        return false;
+    public void deleteRoom(Long id) {
+        roomRepository.deleteById(id);
     }
 
-    public boolean updateRoomAvailability(String roomNumber, boolean available) {
-        Room room = findRoomByNumber(roomNumber);
-
-        if (room != null) {
-            room.setAvailable(available);
-            return true;
-        }
-        
-        return false;
-    }
-    public void assignRoomToTenant(int roomId, int tenantId) {
-        com.nestify.pg.dao.RoomDAO roomDAO = new com.nestify.pg.dao.RoomDAO();
-        roomDAO.assignRoomToTenant(roomId, tenantId);
+    public Room assignRoom(Long roomId) {
+        Room room = roomRepository.findById(roomId)
+                .orElseThrow(() -> new RuntimeException("Room not found"));
+        room.setAvailable(false);
+        return roomRepository.save(room);
     }
 }

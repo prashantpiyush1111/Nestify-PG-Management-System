@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.nestify.pg.entity.Complaint;
 import com.nestify.pg.util.DBConnection;
 
@@ -12,7 +13,7 @@ public class ComplaintDAO {
 
     // Add Complaint
     public void addComplaint(Complaint complaint) {
-        String query = "INSERT INTO complaint (tenant_name, room_number, description, status) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO complaint (tenant_name, room_number, issue, status) VALUES (?, ?, ?, ?)";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
 
@@ -25,7 +26,6 @@ public class ComplaintDAO {
 
         } catch (Exception e) {
             System.err.println("Error adding complaint: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -33,16 +33,17 @@ public class ComplaintDAO {
     public List<Complaint> getAllComplaints() {
         List<Complaint> list = new ArrayList<>();
         String query = "SELECT * FROM complaint";
+
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 Complaint c = new Complaint(
-                    rs.getLong("id"),           // ✅ getLong directly, no cast
+                    rs.getLong("id"),
                     rs.getString("tenant_name"),
                     rs.getString("room_number"),
-                    rs.getString("description"),
+                    rs.getString("issue"),
                     rs.getString("status")
                 );
                 list.add(c);
@@ -50,49 +51,51 @@ public class ComplaintDAO {
 
         } catch (Exception e) {
             System.err.println("Error fetching complaints: " + e.getMessage());
-            e.printStackTrace();
         }
+
         return list;
     }
 
     // Update Complaint Status
-    public void updateComplaintStatus(int complaintId, String status) {
+    public void updateComplaintStatus(long complaintId, String status) {
         String query = "UPDATE complaint SET status = ? WHERE id = ?";
+
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
 
             ps.setString(1, status);
-            ps.setInt(2, complaintId);
+            ps.setLong(2, complaintId);
             int rows = ps.executeUpdate();
+
             if (rows > 0) {
                 System.out.println("Complaint status updated");
             } else {
-                System.out.println("Complaint not found with id: " + complaintId); // ✅ better message
+                System.out.println("Complaint not found with id: " + complaintId);
             }
 
         } catch (Exception e) {
             System.err.println("Error updating complaint: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
     // Delete Complaint
-    public void deleteComplaint(int id) {
+    public void deleteComplaint(long id) {
         String query = "DELETE FROM complaint WHERE id = ?";
+
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(query)) {
 
-            ps.setInt(1, id);
+            ps.setLong(1, id);
             int rows = ps.executeUpdate();
+
             if (rows > 0) {
                 System.out.println("Complaint deleted successfully");
             } else {
-                System.out.println("Complaint not found with id: " + id); // ✅ id bhi print hoga
+                System.out.println("Complaint not found with id: " + id);
             }
 
         } catch (Exception e) {
             System.err.println("Error deleting complaint: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 }
