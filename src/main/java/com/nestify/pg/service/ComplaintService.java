@@ -1,30 +1,37 @@
 package com.nestify.pg.service;
 
 import com.nestify.pg.entity.Complaint;
-import com.nestify.pg.dao.ComplaintDAO;
+import com.nestify.pg.repository.ComplaintRepository;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service
 public class ComplaintService {
 
-    private ComplaintDAO dao = new ComplaintDAO();
+    private final ComplaintRepository complaintRepository;
 
-    // Add Complaint (DB me save karega)
-    public void addComplaint(Complaint complaint) {
-        dao.addComplaint(complaint);
+    public ComplaintService(ComplaintRepository complaintRepository) {
+        this.complaintRepository = complaintRepository;
     }
 
-    // Get All Complaints (DB se fetch karega)
+    public Complaint addComplaint(Complaint complaint) {
+        complaint.setStatus("Pending");
+        return complaintRepository.save(complaint);
+    }
+
     public List<Complaint> getAllComplaints() {
-        return dao.getAllComplaints();
+        return complaintRepository.findAll();
     }
 
-    // Update Complaint Status (by ID)
-    public void updateComplaintStatus(int id, String status) {
-        dao.updateComplaintStatus(id, status);
+    public Complaint updateStatus(Long id, String status) {
+        Complaint complaint = complaintRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Complaint not found"));
+        complaint.setStatus(status);
+        return complaintRepository.save(complaint);
     }
 
-    // Delete Complaint (by ID)
-    public void deleteComplaint(int id) {
-        dao.deleteComplaint(id);
+    public void deleteComplaint(Long id) {
+        complaintRepository.deleteById(id);
     }
 }
