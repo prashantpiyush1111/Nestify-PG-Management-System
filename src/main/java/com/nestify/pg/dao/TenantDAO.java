@@ -22,8 +22,11 @@ public class TenantDAO {
             ps.setString(2, tenant.getPhoneNumber());
             ps.setString(3, tenant.getIdProof());
             ps.setString(4, tenant.getAssignedRoomNumber());
-            ps.executeUpdate();
-            System.out.println("Tenant saved in DB");
+            int rows = ps.executeUpdate();
+
+            if (rows > 0) {
+                System.out.println("Tenant saved in DB");
+            }
 
         } catch (Exception e) {
             System.err.println("Error saving tenant: " + e.getMessage());
