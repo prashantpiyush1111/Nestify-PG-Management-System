@@ -25,57 +25,49 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final JwtUtil jwtUtil;
+	private final JwtUtil jwtUtil;
 
-    public SecurityConfig(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
-    }
+	public SecurityConfig(JwtUtil jwtUtil) {
+		this.jwtUtil = jwtUtil;
+	}
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
-                .anyRequest().authenticated()
-            )
-            .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http.csrf(csrf -> csrf.disable())
+				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**", "/api/pg-listings/**").permitAll()
+						.anyRequest().authenticated())
+				.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
+		return http.build();
+	}
 
-    @Bean
-    public OncePerRequestFilter jwtFilter() {
-        return new OncePerRequestFilter() {
-            @Override
-            protected void doFilterInternal(HttpServletRequest request,
-                                            HttpServletResponse response,
-                                            FilterChain chain)
-                    throws jakarta.servlet.ServletException, IOException {
+	@Bean
+	public OncePerRequestFilter jwtFilter() {
+		return new OncePerRequestFilter() {
+			@Override
+			protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+					throws jakarta.servlet.ServletException, IOException {
 
-                String header = request.getHeader("Authorization");
+				String header = request.getHeader("Authorization");
 
-                if (header != null && header.startsWith("Bearer ")) {
-                    String token = header.substring(7);
-                    if (jwtUtil.validateToken(token)) {
-                        String username = jwtUtil.extractUsername(token);
-                        String role = jwtUtil.extractRole(token);
-                        UsernamePasswordAuthenticationToken auth =
-                            new UsernamePasswordAuthenticationToken(
-                                username, null,
-                                List.of(new SimpleGrantedAuthority("ROLE_" + role))
-                            );
-                        SecurityContextHolder.getContext().setAuthentication(auth);
-                    }
-                }
-                chain.doFilter(request, response);
-            }
-        };
-    }
+				if (header != null && header.startsWith("Bearer ")) {
+					String token = header.substring(7);
+					if (jwtUtil.validateToken(token)) {
+						String username = jwtUtil.extractUsername(token);
+						String role = jwtUtil.extractRole(token);
+						UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username,
+								null, List.of(new SimpleGrantedAuthority("ROLE_" + role)));
+						SecurityContextHolder.getContext().setAuthentication(auth);
+					}
+				}
+				chain.doFilter(request, response);
+			}
+		};
+	}
 }
