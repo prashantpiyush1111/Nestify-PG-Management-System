@@ -1,149 +1,151 @@
 # 🏠 Nestify PG Management System
 
 ## 📌 Overview
-Nestify PG Management System is a Java-based application designed to manage Paying Guest (PG) accommodations efficiently. It simplifies operations between landlords (admins) and tenants by automating room allocation, payments, complaint handling, and role-based access control.
-
-This project follows a layered architecture using DAO and Service design patterns to ensure scalability, maintainability, and separation of concerns.
+Nestify is a full-stack PG (Paying Guest) Management System built with **Spring Boot** backend and **React** frontend. It enables PG owners (admins) to manage rooms, tenants, payments, and complaints, while tenants can browse available PGs, track payments, and raise complaints — all through a modern web interface.
 
 ---
 
 ## 🎯 Objectives
-- Automate manual PG management processes
-- Implement secure authentication and authorization
-- Manage tenants, rooms, payments, and complaints efficiently
-- Build a scalable backend system
+- Automate PG management operations via a web application
+- Implement secure JWT-based authentication and authorization
+- Role-based access for Admin and Tenant
+- Build a scalable REST API backend with React frontend
 
 ---
 
 ## 🚀 Key Features
 
 ### 🔐 Authentication & Authorization
-- Secure login system
+- JWT-based secure login
 - Role-based access control (ADMIN / TENANT)
+- BCrypt password encryption
 
 ### 🏢 Room Management
-- Add, update, and delete rooms
+- Add, update, delete rooms
 - Track room availability
 - Assign rooms to tenants
 
 ### 👤 Tenant Management
-- Register new tenants
-- Manage tenant details
+- Register and manage tenants
+- View tenant details
 
 ### 💰 Payment Management
 - Track rent payments
-- Maintain payment history
+- Mark payments as paid
+- Filter pending payments
 
 ### 🛠️ Complaint Management
 - Tenants can raise complaints
-- Admin can resolve complaints
+- Admin can update complaint status (OPEN → IN_PROGRESS → RESOLVED)
+
+### 🏡 PG Discovery
+- Admin can register their PG listing with photos, price, rules and contact
+- Tenants can browse and search available PGs by city or name
 
 ---
 
 ## 🛠️ Tech Stack
 
-- Java (Core Java)
-- Maven
+### Backend
+- Java 21
+- Spring Boot 3.2
+- Spring Security + JWT
+- Spring Data JPA / Hibernate
 - MySQL
-- JDBC
-- IntelliJ / Eclipse
+- Maven
+
+### Frontend
+- React 18 (Vite)
+- Tailwind CSS
+- Axios
+- React Router DOM
 
 ---
 
 ## 📂 Project Structure
 
-src/main/java/com/nestify/pg
-
-- entity → Data models (User, Room, Tenant, Payment, Complaint)
-- dao → Database operations
-- service → Business logic
-- util → Helper classes
-- MainApp.java → Entry point
+```
+nestify-pg-management/
+├── src/main/java/com/nestify/pg/
+│   ├── config/        → Security and CORS config
+│   ├── controller/    → REST API endpoints
+│   ├── entity/        → JPA entities
+│   ├── repository/    → Spring Data repositories
+│   ├── service/       → Business logic
+│   └── util/          → JWT utility
+├── frontend/
+│   ├── src/
+│   │   ├── pages/     → React pages
+│   │   ├── api.js     → Axios client
+│   │   └── AuthContext.jsx → JWT auth state
+│   └── vite.config.js
+└── pom.xml
+```
 
 ---
 
 ## ⚙️ System Architecture
 
-- Presentation Layer → MainApp (CLI-based)
-- Business Layer → Service classes
-- Data Access Layer → DAO classes
-- Database Layer → MySQL
-
----
-
-## 🔄 Application Flow
-
-1. User logs in (Admin or Tenant)
-2. System verifies credentials
-3. Based on role:
-   - Admin manages rooms, tenants, payments, complaints
-   - Tenant views details, pays rent, raises complaints
-4. Data flows through Service → DAO → Database
+```
+React Frontend (port 5173)
+        ↓ HTTP/REST
+Spring Boot Backend (port 8080)
+        ↓ JPA
+MySQL Database
+```
 
 ---
 
 ## ▶️ How to Run
 
+### Backend
 1. Clone the repository:
-   git clone https://github.com/prashantpiyush1111/nestify-pg-management-system.git 
+```bash
+git clone https://github.com/prashantpiyush1111/Nestify-PG-Management-System.git
+```
+2. Open in Eclipse or IntelliJ
+3. Configure MySQL in `src/main/resources/application.properties`:
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/nestify_db
+spring.datasource.username=root
+spring.datasource.password=yourpassword
+```
+4. Run as Spring Boot App (port 8080)
 
-2. Open in IntelliJ or Eclipse
-
-3. Configure MySQL database:
-   - Create database (nestify_db)
-   - Update DB credentials in code
-
-4. Build project:
-   mvn clean install
-
-5. Run:
-   MainApp.java
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Open: http://localhost:5173
 
 ---
 
 ## 🧪 Sample Credentials
 
-Admin:
-- Username: admin
-- Password: admin123
-
-Tenant:
-- Username: tenant1
-- Password: 1234
+| Role   | Username | Password  |
+|--------|----------|-----------|
+| Admin  | admin    | admin123  |
+| Tenant | tenant1  | tenant123 |
 
 ---
 
 ## 🔮 Future Enhancements
-
-- Web UI (Spring Boot + React)
 - Email/SMS notifications
 - Payment gateway integration
-- REST APIs
-- JWT Authentication
-
----
-
-## 📌 Key Highlights
-
-- Clean layered architecture
-- DAO & Service design patterns
-- Role-based access control
-- Real-world project use case
+- Google Maps integration for PG location
+- Image upload via Cloudinary or S3
+- Mobile app using React Native
 
 ---
 
 ## 👨‍💻 Author
-
-Prashant Maurya 
-
----
-
-## ⭐ Contribution
-
-Feel free to fork and contribute.
+**Prashant Maurya**
+B.Tech CSE | IEC College of Engineering and Technology
+GitHub: [@prashantpiyush1111](https://github.com/prashantpiyush1111)
 
 ---
 
 ## 📜 License
-
 MIT License
