@@ -6,17 +6,21 @@ import Rooms      from "./pages/Rooms";
 import Tenants    from "./pages/Tenants";
 import Payments   from "./pages/Payments";
 import Complaints from "./pages/Complaints";
+import MyPg       from "./pages/MyPg";
+import FindPg     from "./pages/FindPg";
 
 const ADMIN_NAV = [
-  { to: "/",           label: "Dashboard",    icon: "🏠" },
-  { to: "/rooms",      label: "Rooms",        icon: "🛏️" },
-  { to: "/tenants",    label: "Tenants",      icon: "👤" },
-  { to: "/payments",   label: "Payments",     icon: "💰" },
-  { to: "/complaints", label: "Complaints",   icon: "📋" },
+  { to: "/",           label: "Dashboard",  icon: "🏠" },
+  { to: "/rooms",      label: "Rooms",      icon: "🛏️" },
+  { to: "/tenants",    label: "Tenants",    icon: "👤" },
+  { to: "/payments",   label: "Payments",   icon: "💰" },
+  { to: "/complaints", label: "Complaints", icon: "📋" },
+  { to: "/my-pg",      label: "My PG",      icon: "🏡" },
 ];
 
 const TENANT_NAV = [
   { to: "/",           label: "Dashboard",    icon: "🏠" },
+  { to: "/find-pg",    label: "Find PG",      icon: "🔍" },
   { to: "/payments",   label: "My Payments",  icon: "💰" },
   { to: "/complaints", label: "My Complaints",icon: "📋" },
 ];
@@ -101,6 +105,8 @@ export default function App() {
         <Route path="/tenants"    element={<ProtectedRoute><Tenants    /></ProtectedRoute>} />
         <Route path="/payments"   element={<ProtectedRoute><Payments   /></ProtectedRoute>} />
         <Route path="/complaints" element={<ProtectedRoute><Complaints /></ProtectedRoute>} />
+        <Route path="/my-pg"      element={<ProtectedRoute><MyPg      /></ProtectedRoute>} />
+        <Route path="/find-pg"    element={<ProtectedRoute><FindPg    /></ProtectedRoute>} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </BrowserRouter>
