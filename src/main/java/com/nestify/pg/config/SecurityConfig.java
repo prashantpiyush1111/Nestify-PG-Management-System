@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -40,7 +41,15 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable())
 				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**", "/api/pg-listings/**").permitAll()
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers("/api/auth/**").permitAll()
+						.requestMatchers(HttpMethod.GET, "/api/pg-listings/**").permitAll()
+						.requestMatchers(HttpMethod.POST, "/api/pg-listings/**").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.PUT, "/api/pg-listings/**").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.DELETE, "/api/pg-listings/**").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.POST, "/api/rooms/**", "/api/tenants/**").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.PUT, "/api/rooms/**", "/api/tenants/**").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.DELETE, "/api/rooms/**", "/api/tenants/**").hasRole("ADMIN")
 						.anyRequest().authenticated())
 				.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
