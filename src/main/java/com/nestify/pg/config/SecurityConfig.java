@@ -43,13 +43,29 @@ public class SecurityConfig {
 				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers("/api/auth/**").permitAll()
+
+						// PG listings: public browsing, admin-only writes
 						.requestMatchers(HttpMethod.GET, "/api/pg-listings/**").permitAll()
 						.requestMatchers(HttpMethod.POST, "/api/pg-listings/**").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.PUT, "/api/pg-listings/**").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.DELETE, "/api/pg-listings/**").hasRole("ADMIN")
+
+						// Rooms & tenants: admin-only writes, any logged-in user can read
 						.requestMatchers(HttpMethod.POST, "/api/rooms/**", "/api/tenants/**").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.PUT, "/api/rooms/**", "/api/tenants/**").hasRole("ADMIN")
 						.requestMatchers(HttpMethod.DELETE, "/api/rooms/**", "/api/tenants/**").hasRole("ADMIN")
+
+						// Complaints: any authenticated user can file/view, only admin manages/resolves
+						.requestMatchers(HttpMethod.POST, "/api/complaints/**").authenticated()
+						.requestMatchers(HttpMethod.GET, "/api/complaints/**").authenticated()
+						.requestMatchers(HttpMethod.PUT, "/api/complaints/**").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.DELETE, "/api/complaints/**").hasRole("ADMIN")
+
+						// Payments: admin manages all payment records (creation, marking paid)
+						.requestMatchers(HttpMethod.POST, "/api/payments/**").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.PUT, "/api/payments/**").hasRole("ADMIN")
+						.requestMatchers(HttpMethod.GET, "/api/payments/**").authenticated()
+
 						.anyRequest().authenticated())
 				.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
