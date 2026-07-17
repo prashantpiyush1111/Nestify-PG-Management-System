@@ -52,7 +52,13 @@ public class AuthService {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new RuntimeException("Username already exists");
         }
-        User user = new User(null, username, passwordEncoder.encode(password), role);
+        // Public registration can only ever create TENANT accounts.
+        // ADMIN accounts must be created manually (DB seed/migration) or via
+        // a separate admin-only endpoint protected by an existing admin's JWT.
+        if (role == Role.ADMIN) {
+            throw new RuntimeException("Cannot self-register as ADMIN");
+        }
+        User user = new User(null, username, passwordEncoder.encode(password), Role.TENANT);
         return userRepository.save(user);
     }
 }
