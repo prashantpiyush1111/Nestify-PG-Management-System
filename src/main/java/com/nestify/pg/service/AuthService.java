@@ -29,14 +29,17 @@ public class AuthService {
     public Map<String, String> login(String username, String password) {
         Optional<User> userOpt = userRepository.findByUsername(username);
 
+        // SECURITY: Use the exact same error message whether the username
+        // doesn't exist or the password is wrong. Distinguishing between
+        // the two lets an attacker enumerate valid usernames.
         if (userOpt.isEmpty()) {
-            throw new RuntimeException("User not found");
+            throw new RuntimeException("Invalid username or password");
         }
 
         User user = userOpt.get();
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new RuntimeException("Invalid password");
+            throw new RuntimeException("Invalid username or password");
         }
 
         String token = jwtUtil.generateToken(username, user.getRole().name());
