@@ -9,7 +9,6 @@ import java.util.List;
 
 @Service
 public class PaymentService {
-
     private final PaymentRepository paymentRepository;
 
     public PaymentService(PaymentRepository paymentRepository) {
@@ -39,5 +38,9 @@ public class PaymentService {
 
     public List<Payment> getPendingPayments() {
         return paymentRepository.findByStatus("PENDING");
+    }
+
+    public List<Payment> getPendingPaymentsByTenant(String tenantName) {
+        return paymentRepository.findByTenantNameAndStatus(tenantName, "PENDING");
     }
 }

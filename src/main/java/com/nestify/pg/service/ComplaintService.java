@@ -8,7 +8,6 @@ import java.util.List;
 
 @Service
 public class ComplaintService {
-
     private final ComplaintRepository complaintRepository;
 
     public ComplaintService(ComplaintRepository complaintRepository) {
@@ -24,6 +23,10 @@ public class ComplaintService {
         return complaintRepository.findAll();
     }
 
+    public List<Complaint> getComplaintsByTenant(String tenantName) {
+        return complaintRepository.findByTenantName(tenantName);
+    }
+
     public Complaint updateStatus(Long id, String status) {
         Complaint complaint = complaintRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Complaint not found"));
@@ -31,7 +34,15 @@ public class ComplaintService {
         return complaintRepository.save(complaint);
     }
 
+    public Complaint getById(Long id) {
+        return complaintRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Complaint not found"));
+    }
+
     public void deleteComplaint(Long id) {
+        if (!complaintRepository.existsById(id)) {
+            throw new RuntimeException("Complaint not found");
+        }
         complaintRepository.deleteById(id);
     }
 }
