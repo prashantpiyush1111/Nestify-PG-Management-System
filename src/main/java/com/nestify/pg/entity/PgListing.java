@@ -1,6 +1,8 @@
 package com.nestify.pg.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 @Table(name = "pg_listings")
@@ -10,11 +12,21 @@ public class PgListing {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Owner username is required")
     private String ownerUsername;
+
+    @NotBlank(message = "PG name is required")
     private String pgName;
+
+    @NotBlank(message = "Address is required")
     private String address;
+
+    @NotBlank(message = "City is required")
     private String city;
+
+    @Positive(message = "Price per month must be greater than 0")
     private Double pricePerMonth;
+
     private String imageUrl;
 
     @Column(length = 2000)
@@ -23,6 +35,7 @@ public class PgListing {
     @Column(length = 1000)
     private String description;
 
+    @NotBlank(message = "Contact number is required")
     private String contactNumber;
 
     // Getters and Setters
