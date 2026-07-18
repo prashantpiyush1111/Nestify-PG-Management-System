@@ -3,6 +3,9 @@ package com.nestify.pg.controller;
 import com.nestify.pg.entity.Payment;
 import com.nestify.pg.service.PaymentService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,9 +20,18 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
+    private boolean isAdmin(Authentication auth) {
+        return auth.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(a -> a.equals("ROLE_ADMIN"));
+    }
+
     @GetMapping
-    public List<Payment> getAllPayments() {
-        return paymentService.getAllPayments();
+    public List<Payment> getAllPayments(Authentication auth) {
+        if (isAdmin(auth)) {
+            return paymentService.getAllPayments();
+        }
+        return paymentService.getPaymentsByTenant(auth.getName());
     }
 
     @PostMapping
@@ -33,12 +45,18 @@ public class PaymentController {
     }
 
     @GetMapping("/pending")
-    public List<Payment> getPending() {
-        return paymentService.getPendingPayments();
+    public List<Payment> getPending(Authentication auth) {
+        if (isAdmin(auth)) {
+            return paymentService.getPendingPayments();
+        }
+        return paymentService.getPendingPaymentsByTenant(auth.getName());
     }
 
     @GetMapping("/tenant/{name}")
-    public List<Payment> getByTenant(@PathVariable String name) {
+    public List<Payment> getByTenant(@PathVariable String name, Authentication auth) {
+        if (!isAdmin(auth) && !auth.getName().equals(name)) {
+            throw new AccessDeniedException("You can only view your own payments");
+        }
         return paymentService.getPaymentsByTenant(name);
     }
 }
