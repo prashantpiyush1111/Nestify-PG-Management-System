@@ -64,23 +64,27 @@ Nestify is a full-stack PG (Paying Guest) Management System built with **Spring 
 
 ## 📂 Project Structure
 
-```
 nestify-pg-management/
 ├── src/main/java/com/nestify/pg/
-│   ├── config/        → Security and CORS config
-│   ├── controller/    → REST API endpoints
-│   ├── entity/        → JPA entities
-│   ├── repository/    → Spring Data repositories
-│   ├── service/       → Business logic
-│   └── util/          → JWT utility
+│   ├── config/         → SecurityConfig (JWT filter, role rules), CorsConfig (env-based origins)
+│   ├── controller/     → REST API endpoints (Auth, Room, Tenant, Complaint, Payment, PgListing)
+│   ├── entity/         → JPA entities (User, Room, Tenant, Complaint, Payment, PgListing, Role)
+│   ├── repository/     → Spring Data JPA repositories
+│   ├── service/        → Business logic (incl. PgListingService)
+│   ├── exception/      → GlobalExceptionHandler (centralized error responses)
+│   └── util/           → JwtUtil (token generate/validate)
+├── src/main/resources/
+│   └── application.properties
 ├── frontend/
 │   ├── src/
-│   │   ├── pages/     → React pages
-│   │   ├── api.js     → Axios client
+│   │   ├── pages/       → React pages
+│   │   ├── assets/      → Static assets
+│   │   ├── api.js       → Axios client
 │   │   └── AuthContext.jsx → JWT auth state
 │   └── vite.config.js
+├── .env.example         → Environment variable template
+├── .gitignore
 └── pom.xml
-```
 
 ---
 
