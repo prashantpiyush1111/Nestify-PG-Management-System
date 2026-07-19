@@ -6,7 +6,7 @@ Nestify is a full-stack PG (Paying Guest) Management System built with **Spring 
 ## 📸 Screenshots
 
 <p align="center">
-  <img src="docs/screenshots/login.png" width="45%" />
+  <img src="docs/screenshots/login.png" width="35%" />
   <img src="docs/screenshots/tenant-dashboard.png" width="45%" />
 </p>
 
