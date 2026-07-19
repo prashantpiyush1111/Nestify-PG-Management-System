@@ -4,6 +4,17 @@
 Nestify is a full-stack PG (Paying Guest) Management System built with **Spring Boot** backend and **React** frontend. It enables PG owners (admins) to manage rooms, tenants, payments, and complaints, while tenants can browse available PGs, track payments, and raise complaints — all through a modern web interface.
 
 ---
+## 📚 Documentation
+
+Full documentation is available in the [Project Wiki](https://github.com/prashantpiyush1111/Nestify-PG-Management-System/wiki), including:
+
+- [Getting Started](https://github.com/prashantpiyush1111/Nestify-PG-Management-System/wiki/Getting-Started) — setup & run instructions
+- [Architecture](https://github.com/prashantpiyush1111/Nestify-PG-Management-System/wiki/Architecture) — tech stack & system design
+- [Features](https://github.com/prashantpiyush1111/Nestify-PG-Management-System/wiki/Features) — full feature list
+- [API Reference](https://github.com/prashantpiyush1111/Nestify-PG-Management-System/wiki/API-Reference) — REST endpoints
+- [Roadmap](https://github.com/prashantpiyush1111/Nestify-PG-Management-System/wiki/Roadmap) — planned enhancements
+- [Contributing](https://github.com/prashantpiyush1111/Nestify-PG-Management-System/wiki/Contributing) — how to contribute
+- [FAQ](https://github.com/prashantpiyush1111/Nestify-PG-Management-System/wiki/FAQ) — troubleshooting
 
 ## 🎯 Objectives
 - Automate PG management operations via a web application
