@@ -31,7 +31,7 @@ export default function Tenants() {
     await api.delete(`/tenants/${id}`); load();
   };
 
-  const F = ({ label, field, placeholder }) => (
+  const renderField = (label, field, placeholder) => (
     <div>
       <label className="block text-xs text-gray-500 mb-1">{label}</label>
       <input placeholder={placeholder || label} value={form[field]}
@@ -91,10 +91,10 @@ export default function Tenants() {
           <div className="bg-white rounded-2xl p-6 w-full max-w-sm fade-in shadow-xl">
             <h3 className="font-bold text-lg mb-4">{editId ? "Edit Tenant" : "Add Tenant"}</h3>
             <div className="space-y-3">
-              <F label="Name" field="name" />
-              <F label="Phone Number" field="phoneNumber" />
-              <F label="ID Proof" field="idProof" placeholder="Aadhar/PAN/etc" />
-              <F label="Assigned Room Number" field="assignedRoomNumber" />
+              {renderField("Name", "name")}
+              {renderField("Phone Number", "phoneNumber")}
+              {renderField("ID Proof", "idProof", "Aadhar/PAN/etc")}
+              {renderField("Assigned Room Number", "assignedRoomNumber")}
             </div>
             <div className="flex gap-2 mt-5">
               <button onClick={() => setModal(false)} className="flex-1 border rounded-xl py-2 text-sm">Cancel</button>
