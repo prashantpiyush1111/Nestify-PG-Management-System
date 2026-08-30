@@ -2,27 +2,26 @@ name: Prashant's PR Checker Bot
 
 on:
   pull_request:
-    types: [opened, edited]
+    types: [opened, edited, synchronize]
 
 jobs:
-  check:
+  validate-pr:
+    name: Validate PR
     runs-on: ubuntu-latest
     steps:
-      - name: Validate PR
+      - name: Validate PR metadata
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const pr = context.payload.pull_request;
             const body = pr.body || '';
-            let problems = [];
+            const problems = [];
 
-            // Check 1: Is an issue linked?
-            if (!body.match(/(?:fixes|closes|resolves)\s#(\d+)/i)) {
+            if (!body.match(/(?:fixes|closes|resolves)\s+#(\d+)/i)) {
               problems.push('❌ No issue linked — please write `Fixes #ISSUE_NUMBER` in your description');
             }
 
-            // Check 2: Is there a proper description?
             if (body.trim().length < 20) {
               problems.push('❌ PR description is too short — please add more details');
             }
@@ -34,17 +33,63 @@ jobs:
                 issue_number: pr.number,
                 body: `Hey @${pr.user.login}! Please fix the following before this PR can be reviewed:\n\n${problems.join('\n')}`
               });
-            } else {
-              await github.rest.issues.addLabels({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: pr.number,
-                labels: ['ready-for-review']
-              });
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: pr.number,
-                body: `✅ Everything looks good @${pr.user.login}! Your PR is ready for review.`
-              });
+              core.setFailed(problems.join('\n'));
+              return;
             }
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              labels: ['ready-for-review']
+            });
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body: `✅ PR metadata looks good @${pr.user.login}! Build and test checks will determine whether it is ready for review.`
+            });
+
+  backend:
+    name: Backend build and tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Run Maven verification
+        run: mvn -B verify
+
+  frontend:
+    name: Frontend lint and build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Build frontend
+        run: npm run build
