@@ -1,186 +1,180 @@
-# 🏠 Nestify PG Management System
+# 🏠 Nestify — PG Management System
+
+> A full-stack web application for managing paying-guest properties, rooms, tenants, payments, complaints, and PG discovery.
 
 ## 📌 Overview
-Nestify is a full-stack PG (Paying Guest) Management System built with **Spring Boot** backend and **React** frontend. It enables PG owners (admins) to manage rooms, tenants, payments, and complaints, while tenants can browse available PGs, track payments, and raise complaints — all through a modern web interface.
 
-## 📸 Screenshots
+**Nestify** is a full-stack PG (Paying Guest) Management System built with a **Spring Boot backend** and **React frontend** backed by **MySQL**.
 
-<p align="center">
-  <img src="docs/screenshots/login.png" width="35%" />
-  <img src="docs/screenshots/tenant-dashboard.png" width="45%" />
-</p>
+The application provides separate experiences for administrators and tenants. Administrators can manage PG operations, while tenants can discover listings, track payments, and raise complaints.
 
-<p align="center">
-  <img src="docs/screenshots/find-pg.png" width="45%" />
-  <img src="docs/screenshots/admin-dashboard.png" width="45%" />
-</p>
-
-<p align="center">
-  <img src="docs/screenshots/admin-rooms.png" width="45%" />
-  <img src="docs/screenshots/my-pg-listing.png" width="45%" />
-</p>
-
-*Login • Tenant Dashboard • Find PG (Tenant view) • Admin Dashboard • Room Management • PG Listing Form (Admin)*
-
----
----
-## 📚 Documentation
-
-Full documentation is available in the [Project Wiki](https://github.com/prashantpiyush1111/Nestify-PG-Management-System/wiki), including:
-
-- [Getting Started](https://github.com/prashantpiyush1111/Nestify-PG-Management-System/wiki/Getting-Started) — setup & run instructions
-- [Architecture](https://github.com/prashantpiyush1111/Nestify-PG-Management-System/wiki/Architecture) — tech stack & system design
-- [Features](https://github.com/prashantpiyush1111/Nestify-PG-Management-System/wiki/Features) — full feature list
-- [API Reference](https://github.com/prashantpiyush1111/Nestify-PG-Management-System/wiki/API-Reference) — REST endpoints
-- [Roadmap](https://github.com/prashantpiyush1111/Nestify-PG-Management-System/wiki/Roadmap) — planned enhancements
-- [Contributing](https://github.com/prashantpiyush1111/Nestify-PG-Management-System/wiki/Contributing) — how to contribute
-- [FAQ](https://github.com/prashantpiyush1111/Nestify-PG-Management-System/wiki/FAQ) — troubleshooting
-
-## 🎯 Objectives
-- Automate PG management operations via a web application
-- Implement secure JWT-based authentication and authorization
-- Role-based access for Admin and Tenant
-- Build a scalable REST API backend with React frontend
-
----
-
-## 🚀 Key Features
+## ✨ Key Features
 
 ### 🔐 Authentication & Authorization
-- JWT-based secure login
-- Role-based access control (ADMIN / TENANT)
-- BCrypt password encryption
+
+- JWT-based authentication
+- Role-based access control for `ADMIN` and `TENANT`
+- BCrypt password encoding
+- Protected backend endpoints
 
 ### 🏢 Room Management
-- Add, update, delete rooms
+
+- Add, update, and delete rooms
 - Track room availability
 - Assign rooms to tenants
 
 ### 👤 Tenant Management
+
 - Register and manage tenants
-- View tenant details
+- View tenant information
+- Connect tenant records with room assignments
 
 ### 💰 Payment Management
+
 - Track rent payments
 - Mark payments as paid
-- Filter pending payments
+- Identify pending payments
 
 ### 🛠️ Complaint Management
+
 - Tenants can raise complaints
-- Admin can update complaint status (OPEN → IN_PROGRESS → RESOLVED)
+- Admins can manage complaint status
+- Workflow: `OPEN → IN_PROGRESS → RESOLVED`
 
 ### 🏡 PG Discovery
-- Admin can register their PG listing with photos, price, rules and contact
+
+- Admins can create PG listings with details, pricing, rules, contact information, and photos
 - Tenants can browse and search available PGs by city or name
 
----
+## 🏗️ Architecture
+
+```text
+┌──────────────────────┐
+│   React + Vite UI    │
+│   Tailwind CSS       │
+└──────────┬───────────┘
+           │ HTTP / REST
+           ▼
+┌──────────────────────┐
+│   Spring Boot API    │
+│ Security • Services  │
+│ Controllers • JPA    │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│    MySQL Database    │
+└──────────────────────┘
+```
 
 ## 🛠️ Tech Stack
 
-### Backend
-- Java 21
-- Spring Boot 3.2
-- Spring Security + JWT
-- Spring Data JPA / Hibernate
-- MySQL
-- Maven
-
-### Frontend
-- React 18 (Vite)
-- Tailwind CSS
-- Axios
-- React Router DOM
-
----
+| Layer | Technologies |
+|---|---|
+| Backend | Java 21, Spring Boot 3.2, Spring Security, Spring Data JPA, Hibernate, Maven |
+| Frontend | React 18, Vite, Tailwind CSS, Axios, React Router DOM |
+| Database | MySQL |
+| Security | JWT, BCrypt, role-based authorization |
 
 ## 📂 Project Structure
 
-nestify-pg-management/
+```text
+Nestify-PG-Management-System/
 ├── src/main/java/com/nestify/pg/
-│   ├── config/         → SecurityConfig (JWT filter, role rules), CorsConfig (env-based origins)
-│   ├── controller/     → REST API endpoints (Auth, Room, Tenant, Complaint, Payment, PgListing)
-│   ├── entity/         → JPA entities (User, Room, Tenant, Complaint, Payment, PgListing, Role)
-│   ├── repository/     → Spring Data JPA repositories
-│   ├── service/        → Business logic (incl. PgListingService)
-│   ├── exception/      → GlobalExceptionHandler (centralized error responses)
-│   └── util/           → JwtUtil (token generate/validate)
-├── src/main/resources/
-│   └── application.properties
+│   ├── config/          # Security and CORS configuration
+│   ├── controller/      # REST API endpoints
+│   ├── entity/          # JPA entities
+│   ├── repository/      # Spring Data repositories
+│   ├── service/         # Business logic
+│   ├── exception/       # Global exception handling
+│   └── util/            # JWT utilities
+├── src/main/resources/  # Backend configuration
 ├── frontend/
-│   ├── src/
-│   │   ├── pages/       → React pages
-│   │   ├── assets/      → Static assets
-│   │   ├── api.js       → Axios client
-│   │   └── AuthContext.jsx → JWT auth state
-│   └── vite.config.js
-├── .env.example         → Environment variable template
-├── .gitignore
+│   ├── src/pages/       # React pages
+│   ├── src/assets/      # Frontend assets
+│   ├── src/api.js       # Axios client
+│   └── src/AuthContext.jsx
+├── .env.example
 └── pom.xml
-
----
-
-## ⚙️ System Architecture
-
-```
-React Frontend (port 5173)
-        ↓ HTTP/REST
-Spring Boot Backend (port 8080)
-        ↓ JPA
-MySQL Database
 ```
 
----
+## ⚙️ Local Setup
 
-## ▶️ How to Run
+### Prerequisites
 
-### Backend
-1. Clone the repository:
+- Java 21
+- Maven
+- Node.js and npm
+- MySQL
+
+### 1. Clone
+
 ```bash
 git clone https://github.com/prashantpiyush1111/Nestify-PG-Management-System.git
+cd Nestify-PG-Management-System
 ```
-2. Open in Eclipse or IntelliJ
-3. Configure MySQL in `src/main/resources/application.properties`:
+
+### 2. Configure MySQL
+
+Create the database and configure the backend datasource in `src/main/resources/application.properties`.
+
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/nestify_db
 spring.datasource.username=root
-spring.datasource.password=yourpassword
+spring.datasource.password=your_password
 ```
-4. Run as Spring Boot App (port 8080)
 
-### Frontend
+Keep local credentials and secrets outside version control.
+
+### 3. Run the Backend
+
+Run the Spring Boot application from your IDE or with Maven.
+
+```bash
+mvn spring-boot:run
+```
+
+The backend runs on port `8080` in the documented local setup.
+
+### 4. Run the Frontend
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-Open: http://localhost:5173
 
----
+Open `http://localhost:5173` in your browser.
 
-## 🧪 Sample Credentials
+## 📸 Screenshots
 
-| Role   | Username | Password  |
-|--------|----------|-----------|
-| Admin  | admin    | admin123  |
-| Tenant | tenant1  | tenant123 |
+The repository includes application screenshots covering login, tenant dashboard, PG discovery, admin dashboard, room management, and PG listing workflows.
 
----
+## 📚 Documentation
 
-## 🔮 Future Enhancements
+Detailed project documentation is available in the repository [Wiki](https://github.com/prashantpiyush1111/Nestify-PG-Management-System/wiki), including setup, architecture, features, API reference, roadmap, contributing guidance, and FAQ material.
+
+## 🔒 Security
+
+The application applies JWT-based authentication and role-based authorization, with protected backend resources and BCrypt password encoding.
+
+Do not commit real database passwords, tokens, or other secrets.
+
+## 🗺️ Future Enhancements
+
 - Email/SMS notifications
 - Payment gateway integration
-- Google Maps integration for PG location
-- Image upload via Cloudinary or S3
-- Mobile app using React Native
-
----
+- Google Maps integration for PG locations
+- Cloud-based image storage
+- React Native mobile application
 
 ## 👨‍💻 Author
-**Prashant Maurya**
-B.Tech CSE | IEC College of Engineering and Technology
+
+**Prashant Maurya**  
+B.Tech CSE | Java Full Stack Developer
+
 GitHub: [@prashantpiyush1111](https://github.com/prashantpiyush1111)
 
----
+## 📄 License
 
-## 📜 License
 MIT License
